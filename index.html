@@ -4,25 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ebry.dev</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inknut+Antiqua:wght@400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:         #0f0e0b;
-      --surface:    #151410;
-      --surface2:   #1a1814;
-      --border:     #2a2720;
-      --accent:     #a67c52;
-      --accent-dim: #7a5c3a;
-      --accent-glow:#c4956a;
-      --text:       #d6cfc4;
-      --text-muted: #5a5549;
-      --green:      #5c7a52;
-      --font-serif: 'Cormorant Garamond', Georgia, serif;
-      --font-mono:  'DM Mono', monospace;
+      --bg:        #0d0a06;
+      --surface:   #111008;
+      --surface2:  #0a0804;
+      --border:    #2e2210;
+      --border2:   #221a08;
+      --amber:     #c48a28;
+      --amber-lo:  #8a6020;
+      --amber-dim: #5a4010;
+      --moss:      #5a7a2a;
+      --moss-lo:   #3a5a1e;
+      --text:      #5a4828;
+      --text-hi:   #8a7050;
+      --text-lo:   #2e2210;
+      --font-title:'Inknut Antiqua', serif;
+      --font-mono: 'Courier Prime', monospace;
+      --font-vt:   'VT323', monospace;
     }
 
     html { scroll-behavior: smooth; }
@@ -30,494 +32,515 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-serif);
+      font-family: var(--font-mono);
       min-height: 100vh;
-      overflow-x: hidden;
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.035;
-      pointer-events: none;
-      z-index: 999;
+    @keyframes scroll { from { transform: translateX(110vw); } to { transform: translateX(-100%); } }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* MARQUEE */
+    .marquee-bar {
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border2);
+      padding: 4px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-inner {
+      display: inline-block;
+      font-family: var(--font-vt);
+      font-size: 0.95rem;
+      color: var(--text-lo);
+      letter-spacing: 0.08em;
+      animation: scroll 22s linear infinite;
     }
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
+    /* HEADER */
+    .site-header {
+      background: var(--surface);
+      border-bottom: 2px solid var(--border);
+      padding: 1.1rem 1.75rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.25rem 3rem;
-      border-bottom: 1px solid var(--border);
-      background: rgba(15,14,11,0.9);
-      backdrop-filter: blur(14px);
-    }
-
-    .nav-logo {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--accent-glow);
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      cursor: pointer;
-    }
-
-    .nav-logo em {
-      font-style: italic;
-      font-weight: 400;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    .nav-tabs {
-      display: flex;
-      gap: 0.1rem;
-      list-style: none;
-    }
-
-    .nav-tabs button {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.5rem 1.1rem;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: color 0.2s, background 0.2s;
-    }
-
-    .nav-tabs button:hover { color: var(--text); background: var(--border); }
-    .nav-tabs button.active { color: var(--accent-glow); background: rgba(166,124,82,0.07); }
-
-    /* PAGES */
-    .page { display: none; padding-top: 5rem; min-height: 100vh; animation: rise 0.45s ease; }
-    .page.active { display: block; }
-
-    @keyframes rise {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* HOME */
-    #home {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-      padding: 5rem 2rem 3rem;
-      position: relative;
-    }
-    #home.active { display: flex; }
-
-    #home::before {
-      content: '';
-      position: absolute;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(166,124,82,0.06) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      color: var(--accent-dim);
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: rise 0.5s 0.1s forwards;
-    }
-
-    .hero-title {
-      font-size: clamp(4rem, 11vw, 9rem);
-      font-weight: 600;
-      line-height: 0.9;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 0.25rem;
-      opacity: 0;
-      animation: rise 0.5s 0.2s forwards;
-    }
-
-    .hero-title .domain {
-      font-style: italic;
-      font-weight: 400;
-      color: var(--accent);
-    }
-
-    .hero-sub {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      max-width: 380px;
-      line-height: 1.85;
-      margin: 2.5rem auto 3rem;
-      opacity: 0;
-      animation: rise 0.5s 0.35s forwards;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 1rem;
       flex-wrap: wrap;
-      justify-content: center;
-      opacity: 0;
-      animation: rise 0.5s 0.5s forwards;
+      gap: 0.75rem;
     }
-
-    .btn {
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 0.8rem 2rem;
-      border-radius: 2px;
+    .site-logo {
+      font-family: var(--font-title);
+      font-size: 1.8rem;
+      color: var(--amber);
+      line-height: 1;
+      text-shadow: 1px 1px 0 #050300;
       cursor: pointer;
-      transition: all 0.2s;
-      border: none;
+    }
+    .site-logo span { color: var(--moss); }
+    .site-logo-sub {
+      font-size: 0.58rem;
+      color: var(--text-lo);
+      margin-top: 0.2rem;
+      font-style: italic;
+      letter-spacing: 0.1em;
+    }
+    .header-date {
+      font-family: var(--font-vt);
+      font-size: 0.85rem;
+      color: var(--text-lo);
+      letter-spacing: 0.1em;
     }
 
-    .btn-primary { background: var(--accent); color: var(--bg); }
-    .btn-primary:hover { background: var(--accent-glow); transform: translateY(-1px); }
+    /* LAYOUT */
+    .layout {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      max-width: 1050px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem;
+      gap: 1.5rem;
+      align-items: start;
+    }
 
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-muted);
+    /* SIDEBAR */
+    .sidebar {
+      position: sticky;
+      top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .sidebar-box {
+      background: var(--surface2);
       border: 1px solid var(--border);
     }
-    .btn-ghost:hover { border-color: var(--accent-dim); color: var(--text); }
-
-    .divider-line {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, var(--accent-dim), transparent);
-      margin: 4rem auto 0;
-      opacity: 0;
-      animation: rise 0.5s 0.65s forwards;
-    }
-
-    /* SECTION */
-    .section {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 3rem 2rem 6rem;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 1.25rem;
-      margin-bottom: 2.5rem;
-      padding-bottom: 1.25rem;
+    .sidebar-box-title {
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
-    }
-
-    .section-title {
-      font-size: 2.2rem;
-      font-weight: 600;
-      font-style: italic;
-      letter-spacing: -0.01em;
-      color: var(--text);
-    }
-
-    .section-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--accent-dim);
-      letter-spacing: 0.15em;
+      padding: 0.35rem 0.75rem;
+      font-family: var(--font-vt);
+      font-size: 0.95rem;
+      color: var(--amber-lo);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
+    .nav-list { list-style: none; padding: 0.35rem 0; }
+    .nav-list li button {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      border-left: 2px solid transparent;
+      padding: 0.35rem 0.75rem 0.35rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--amber-dim);
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .nav-list li button::before { content: '> '; color: var(--text-lo); }
+    .nav-list li button:hover { color: var(--amber); background: rgba(196,138,40,0.04); border-left-color: var(--amber-lo); }
+    .nav-list li button.active { color: var(--amber); border-left-color: var(--amber); background: rgba(196,138,40,0.06); }
+    .nav-list li a {
+      display: block;
+      border-left: 2px solid transparent;
+      padding: 0.35rem 0.75rem 0.35rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--amber-dim);
+      text-decoration: none;
+      transition: all 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .nav-list li a::before { content: '> '; color: var(--text-lo); }
+    .nav-list li a:hover { color: var(--amber); background: rgba(196,138,40,0.04); border-left-color: var(--amber-lo); }
+    .nav-divider { border: none; border-top: 1px dotted var(--border2); margin: 0.25rem 0.75rem; }
+    .sidebar-info {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.62rem;
+      color: var(--text-lo);
+      line-height: 2.1;
+      letter-spacing: 0.05em;
+    }
+    .counter {
+      border-top: 1px solid var(--border2);
+      padding: 0.5rem 0.75rem;
+      text-align: center;
+    }
+    .counter-num {
+      font-family: var(--font-vt);
+      font-size: 1.5rem;
+      color: var(--amber-lo);
+      display: block;
+      letter-spacing: 0.1em;
+    }
+    .counter-label {
+      font-size: 0.5rem;
+      color: var(--text-lo);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* MAIN */
+    .main { min-width: 0; }
+    .page { display: none; }
+    .page.active { display: block; animation: rise 0.3s ease; }
+
+    /* BOX */
+    .box { background: var(--surface2); border: 1px solid var(--border); margin-bottom: 1.1rem; }
+    .box-title {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.45rem 1rem;
+      font-family: var(--font-title);
+      font-size: 0.88rem;
+      color: var(--amber-lo);
+      letter-spacing: 0.06em;
+    }
+    .box-body {
+      padding: 1rem 1.1rem;
+      font-size: 0.72rem;
+      color: var(--text);
+      line-height: 1.9;
+    }
+    .box-body em { color: var(--amber); font-style: italic; }
+    .box-body strong { color: var(--text-hi); }
+    .box-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0.75rem 0;
+      position: relative;
+    }
+    .box-divider::after {
+      content: '✦';
+      position: absolute;
+      top: -0.55rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface2);
+      padding: 0 0.4rem;
+      color: var(--border);
+      font-size: 0.6rem;
+    }
+
+    /* UPDATES */
+    .updates { list-style: none; }
+    .update {
+      display: grid;
+      grid-template-columns: 68px 1fr;
+      gap: 0.6rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px dotted var(--border2);
+      font-size: 0.69rem;
+    }
+    .update:last-child { border: none; }
+    .update-date { font-family: var(--font-vt); font-size: 0.88rem; color: var(--text-lo); }
+    .update-text { color: var(--text); }
+    .update-text strong { color: var(--text-hi); }
 
     /* PROJECTS */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
     }
-
     .project-card {
-      background: var(--surface);
-      padding: 2rem 1.75rem;
+      background: var(--surface2);
+      padding: 1.25rem;
+      transition: background 0.2s;
       position: relative;
       overflow: hidden;
-      transition: background 0.2s;
     }
-
     .project-card::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(to right, var(--accent), transparent);
+      height: 1px;
+      background: linear-gradient(to right, var(--amber-lo), transparent);
       transform: scaleX(0);
       transform-origin: left;
       transition: transform 0.3s ease;
     }
-
-    .project-card:hover { background: var(--surface2); }
+    .project-card:hover { background: var(--surface); }
     .project-card:hover::after { transform: scaleX(1); }
-
-    .project-lang {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 0.85rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .project-lang::before {
-      content: '';
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--green);
-    }
-
-    .project-name {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .project-desc {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    .project-links {
-      margin-top: 1.5rem;
-      display: flex;
-      gap: 1rem;
-    }
-
+    .project-tag { font-family: var(--font-vt); font-size: 0.85rem; color: var(--moss-lo); margin-bottom: 0.5rem; letter-spacing: 0.06em; }
+    .project-name { font-family: var(--font-title); font-size: 0.95rem; color: var(--amber-lo); margin-bottom: 0.4rem; }
+    .project-desc { font-size: 0.68rem; color: var(--text); line-height: 1.75; }
     .project-link {
-      font-family: var(--font-mono);
+      display: inline-block;
+      margin-top: 0.75rem;
       font-size: 0.65rem;
-      letter-spacing: 0.08em;
-      color: var(--accent);
+      color: var(--amber-dim);
       text-decoration: none;
+      border-bottom: 1px dotted var(--border);
       transition: color 0.15s;
     }
-    .project-link:hover { color: var(--accent-glow); }
-
-    .add-card {
-      background: transparent !important;
+    .project-link:hover { color: var(--amber); }
+    .project-card.empty {
+      background: transparent;
       border: 1px dashed var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 160px;
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--border);
-      letter-spacing: 0.1em;
+      min-height: 140px;
     }
-    .add-card::after { display: none; }
+    .project-card.empty::after { display: none; }
+    .project-card.empty span { font-family: var(--font-vt); font-size: 0.9rem; color: var(--text-lo); letter-spacing: 0.1em; }
 
     /* BLOG */
-    .blog-list {
-      display: flex;
-      flex-direction: column;
+    .blog-entry { padding: 1.1rem; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    .blog-entry:last-child { border-bottom: none; }
+    .blog-entry:hover { background: rgba(196,138,40,0.02); }
+    .blog-meta { font-family: var(--font-vt); font-size: 0.88rem; color: var(--text-lo); margin-bottom: 0.3rem; letter-spacing: 0.06em; }
+    .blog-title { font-family: var(--font-title); font-size: 1.05rem; color: var(--amber-lo); margin-bottom: 0.35rem; }
+    .blog-excerpt { font-size: 0.7rem; color: var(--text); line-height: 1.8; }
+    .blog-tags { margin-top: 0.6rem; display: flex; gap: 0.35rem; flex-wrap: wrap; }
+    .tag { font-size: 0.58rem; color: var(--text-lo); border: 1px solid var(--border2); padding: 1px 6px; letter-spacing: 0.1em; background: var(--surface); }
+
+    /* ART */
+    .art-intro { font-size: 0.7rem; color: var(--text); line-height: 1.85; margin-bottom: 1rem; font-style: italic; }
+    .art-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
     }
-
-    .blog-post {
-      background: var(--surface);
-      padding: 2.25rem 2.5rem;
-      display: grid;
-      grid-template-columns: 70px 1fr;
-      gap: 2rem;
-      align-items: start;
-      transition: background 0.2s;
+    .art-frame {
+      background: var(--surface2);
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.15s;
     }
-
-    .blog-post:hover { background: var(--surface2); }
-
-    .blog-date {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
-      line-height: 1.8;
-      text-transform: uppercase;
-      padding-top: 0.35rem;
+    .art-frame:hover { background: var(--surface); }
+    .art-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .art-frame-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(13,10,6,0.88);
+      padding: 0.3rem 0.5rem;
+      font-family: var(--font-vt);
+      font-size: 0.85rem;
+      color: var(--amber-dim);
+      text-align: center;
+      letter-spacing: 0.06em;
+      opacity: 0;
+      transition: opacity 0.2s;
     }
-
-    .blog-title {
-      font-size: 1.35rem;
-      font-weight: 600;
-      font-style: italic;
-      margin-bottom: 0.5rem;
-      line-height: 1.25;
-    }
-
-    .blog-excerpt {
-      font-family: var(--font-mono);
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      line-height: 1.75;
-    }
-
-    .blog-tags {
-      margin-top: 1.25rem;
+    .art-frame:hover .art-frame-label { opacity: 1; }
+    .art-frame.empty {
       display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed var(--border2);
+      background: transparent;
+      cursor: default;
     }
+    .art-frame.empty span { font-family: var(--font-vt); font-size: 0.85rem; color: var(--text-lo); letter-spacing: 0.08em; }
+    .art-hint { margin-top: 0.75rem; font-size: 0.6rem; color: var(--text-lo); font-style: italic; line-height: 1.8; }
 
-    .tag {
-      font-family: var(--font-mono);
-      font-size: 0.58rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      border-radius: 2px;
-    }
+    /* LIGHTBOX */
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(5,3,0,0.95); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 85vw; max-height: 75vh; object-fit: contain; border: 1px solid var(--border); }
+    .lightbox-label { font-family: var(--font-vt); font-size: 1.1rem; color: var(--amber-dim); letter-spacing: 0.1em; }
+    .lightbox-close { position: absolute; top: 1.5rem; right: 2rem; font-family: var(--font-vt); font-size: 1.3rem; color: var(--text-lo); cursor: pointer; background: none; border: none; letter-spacing: 0.1em; transition: color 0.15s; }
+    .lightbox-close:hover { color: var(--amber); }
 
     /* FOOTER */
     footer {
-      border-top: 1px solid var(--border);
-      padding: 1.5rem 3rem;
+      border-top: 2px solid var(--border);
+      background: var(--surface);
+      padding: 0.9rem 1.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
     }
-
-    footer span {
-      font-family: var(--font-mono);
-      font-size: 0.6rem;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-    }
+    footer span { font-family: var(--font-vt); font-size: 0.88rem; color: var(--text-lo); letter-spacing: 0.1em; }
 
     @media (max-width: 600px) {
-      nav { padding: 1rem 1.25rem; }
-      .nav-tabs button { padding: 0.4rem 0.65rem; font-size: 0.65rem; }
-      .blog-post { grid-template-columns: 1fr; gap: 0.5rem; }
-      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .site-header { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <span class="nav-logo" onclick="showPage('home')">ebry<em>.dev</em></span>
-    <ul class="nav-tabs">
-      <li><button onclick="showPage('home')"     class="active" id="tab-home">Home</button></li>
-      <li><button onclick="showPage('projects')"            id="tab-projects">Projects</button></li>
-      <li><button onclick="showPage('blog')"                id="tab-blog">Blog</button></li>
-    </ul>
-  </nav>
+<div class="marquee-bar">
+  <span class="marquee-inner">welcome to ebry.dev · new project: mutant chess · art gallery coming soon · built with care · est. mmxxvi ·</span>
+</div>
 
-  <!-- HOME -->
-  <section class="page active" id="home">
-    <p class="eyebrow">— built & grown here</p>
-    <h1 class="hero-title">ebry<span class="domain">.dev</span></h1>
-    <p class="hero-sub">A place for the things I make — code, projects, and whatever I'm thinking about.</p>
-    <div class="hero-cta">
-      <button class="btn btn-primary" onclick="showPage('projects')">Projects</button>
-      <button class="btn btn-ghost"   onclick="showPage('blog')">Blog</button>
+<div class="site-header">
+  <div>
+    <div class="site-logo" onclick="showPage('home')">ebry<span>.dev</span></div>
+    <div class="site-logo-sub">a place for things i make</div>
+  </div>
+  <div class="header-date">FEB · MMXXVI</div>
+</div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">navigate</div>
+      <ul class="nav-list">
+        <li><button onclick="showPage('home')"     id="tab-home"     class="active">Home</button></li>
+        <li><button onclick="showPage('projects')" id="tab-projects">Projects</button></li>
+        <li><button onclick="showPage('blog')"     id="tab-blog">Blog</button></li>
+        <li><button onclick="showPage('art')"      id="tab-art">Art</button></li>
+        <div class="nav-divider"></div>
+        <li><a href="https://wiki.ebry.dev" target="_blank">Wiki</a></li>
+      </ul>
     </div>
-    <div class="divider-line"></div>
-  </section>
-
-  <!-- PROJECTS -->
-  <section class="page" id="projects">
-    <div class="section">
-      <div class="section-header">
-        <h2 class="section-title">Projects</h2>
-        <span class="section-label">// code & builds</span>
+    <div class="sidebar-box">
+      <div class="sidebar-box-title">about</div>
+      <div class="sidebar-info">
+        est. 2026<br>
+        forest edition<br>
+        built w/ claude<br>
+        draws things<br>
+        plays chess
       </div>
-      <div class="projects-grid">
-
-        <!-- ✏️ Copy this card block to add a project -->
-        <div class="project-card">
-          <p class="project-lang">HTML / CSS / JS</p>
-          <h3 class="project-name">This Site</h3>
-          <p class="project-desc">My personal site. Single file, zero dependencies, hosted on GitHub Pages.</p>
-          <div class="project-links">
-            <a class="project-link" href="#">→ Source</a>
-          </div>
-        </div>
-        <!-- end project card -->
-
-        <div class="project-card">
-          <p class="project-lang">HTML / CSS / JS</p>
-          <h3 class="project-name">Mutant Chess</h3>
-          <p class="project-desc">A custom chess variant with mutant rules. Built in a single HTML file.</p>
-          <div class="project-links">
-            <a class="project-link" href="mutant-chess.html">→ Play</a>
-          </div>
-        </div>
-
-        <div class="add-card">＋ add a project</div>
+      <div class="counter">
+        <span class="counter-num">001337</span>
+        <div class="counter-label">visitors</div>
       </div>
     </div>
-  </section>
+  </aside>
 
-  <!-- BLOG -->
-  <section class="page" id="blog">
-    <div class="section">
-      <div class="section-header">
-        <h2 class="section-title">Blog</h2>
-        <span class="section-label">// thoughts & notes</span>
+  <main class="main">
+
+    <!-- HOME -->
+    <div class="page active" id="home">
+      <div class="box">
+        <div class="box-title">Welcome</div>
+        <div class="box-body">
+          hey there — welcome to <em>ebry.dev</em>. this is my little corner of the internet where i put things i make, write, and draw.
+          <div class="box-divider"></div>
+          poke around, stay a while.
+        </div>
       </div>
-      <div class="blog-list">
+      <div class="box">
+        <div class="box-title">Recent Updates</div>
+        <div class="box-body">
+          <ul class="updates">
+            <li class="update">
+              <span class="update-date">FEB 2026</span>
+              <span class="update-text"><strong>Site launched</strong> — got this thing up and running.</span>
+            </li>
+            <li class="update">
+              <span class="update-date">FEB 2026</span>
+              <span class="update-text"><strong>Mutant Chess</strong> is live in projects.</span>
+            </li>
+            <li class="update">
+              <span class="update-date">FEB 2026</span>
+              <span class="update-text"><strong>Art section</strong> added — drawings coming soon.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-        <!-- ✏️ Copy this post block to add a blog post -->
-        <div class="blog-post">
-          <div class="blog-date">Feb<br>2026</div>
-          <div>
-            <h3 class="blog-title">Starting fresh</h3>
-            <p class="blog-excerpt">Just getting this place set up. More to come — projects, experiments, and things worth writing about.</p>
-            <div class="blog-tags">
-              <span class="tag">meta</span>
+    <!-- PROJECTS -->
+    <div class="page" id="projects">
+      <div class="box">
+        <div class="box-title">Projects</div>
+        <div class="projects-grid">
+          <div class="project-card">
+            <div class="project-tag">HTML · CSS · JS</div>
+            <div class="project-name">This Site</div>
+            <p class="project-desc">My personal site. Single file, zero dependencies, hosted on GitHub Pages.</p>
+            <a class="project-link" href="#">source</a>
+          </div>
+          <div class="project-card">
+            <div class="project-tag">HTML · CSS · JS</div>
+            <div class="project-name">Mutant Chess</div>
+            <p class="project-desc">A chess variant where pieces mutate randomly after every move.</p>
+            <a class="project-link" href="mutant-chess.html">play</a>
+          </div>
+          <div class="project-card empty"><span>+ more soon</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG -->
+    <div class="page" id="blog">
+      <div class="box">
+        <div class="box-title">Blog</div>
+        <div class="blog-entry">
+          <div class="blog-meta">FEB · 2026</div>
+          <div class="blog-title">Starting fresh</div>
+          <p class="blog-excerpt">Just getting this place set up. More to come — projects, experiments, and things worth writing about.</p>
+          <div class="blog-tags"><span class="tag">meta</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ART -->
+    <div class="page" id="art">
+      <div class="box">
+        <div class="box-title">Art</div>
+        <div class="box-body">
+          <p class="art-intro">things i've drawn — pencil, ink, whatever. hover to see the title, click to enlarge.</p>
+          <div class="art-grid">
+            <!-- To add art, replace an empty frame with:
+            <div class="art-frame" onclick="openLightbox(this)">
+              <img src="your-image.jpg" alt="title">
+              <div class="art-frame-label">Title</div>
             </div>
+            -->
+            <div class="art-frame empty"><span>coming soon</span></div>
+            <div class="art-frame empty"><span>coming soon</span></div>
+            <div class="art-frame empty"><span>coming soon</span></div>
+            <div class="art-frame empty"><span>+ add art</span></div>
           </div>
+          <p class="art-hint">// to add a drawing: replace an empty frame with an art-frame div containing an img tag and art-frame-label</p>
         </div>
-        <!-- end blog post -->
-
       </div>
     </div>
-  </section>
 
-  <footer>
-    <span>ebry.dev</span>
-    <span>built with claude</span>
-  </footer>
+  </main>
+</div>
 
-  <script>
-    function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-tabs button').forEach(b => b.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.getElementById('tab-' + id).classList.add('active');
-      window.scrollTo({ top: 0 });
-    }
-  </script>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">close ✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-label" id="lightbox-label"></div>
+</div>
+
+<footer>
+  <span>ebry.dev · est. 2026</span>
+  <span>built with claude · github pages</span>
+</footer>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-list button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('tab-' + id).classList.add('active');
+    window.scrollTo({ top: 0 });
+  }
+  function openLightbox(el) {
+    const img = el.querySelector('img');
+    const label = el.querySelector('.art-frame-label');
+    if (!img) return;
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox-label').textContent = label ? label.textContent : '';
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+
 </body>
 </html>
